@@ -89,38 +89,38 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
             <!-- swagger codegen -->
-            <plugin>
-                <groupId>io.swagger</groupId>
-                <artifactId>swagger-codegen-maven-plugin</artifactId>
-                <version>2.4.10</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
+<!--            <plugin>-->
+<!--                <groupId>io.swagger</groupId>-->
+<!--                <artifactId>swagger-codegen-maven-plugin</artifactId>-->
+<!--                <version>2.4.10</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>generate</goal>-->
+<!--                        </goals>-->
 
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/swagger.yaml</inputSpec>
-                            <output>${basedir}/target/generated-sources</output>
-                            <language>spring</language>
-                            <library>spring-boot</library>
-                            <modelPackage>com.benxin.sso.swagger.v1.model</modelPackage>
-                            <apiPackage>com.vape.sso.swagger.v1.api</apiPackage>
-                            <generateSupportingFiles>false</generateSupportingFiles>
-                            <configOptions>
-                                <sourceFolder>swagger</sourceFolder>
-                                <interfaceOnly>true</interfaceOnly>
-                                <dateLibrary>java8</dateLibrary>
-                                <java8>true</java8>
-                                <configPackage>com.vape.sso.swagger.v1.config</configPackage>
-                                <singleContentTypes>true</singleContentTypes>
-                                <useBeanValidation>true</useBeanValidation>
-                                <delegatePattern>true</delegatePattern>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                        <configuration>-->
+<!--                            <inputSpec>${project.basedir}/src/main/resources/swagger.yaml</inputSpec>-->
+<!--                            <output>${basedir}/target/generated-sources</output>-->
+<!--                            <language>spring</language>-->
+<!--                            <library>spring-boot</library>-->
+<!--                            <modelPackage>com.benxin.sso.swagger.v1.model</modelPackage>-->
+<!--                            <apiPackage>com.vape.sso.swagger.v1.api</apiPackage>-->
+<!--                            <generateSupportingFiles>false</generateSupportingFiles>-->
+<!--                            <configOptions>-->
+<!--                                <sourceFolder>swagger</sourceFolder>-->
+<!--                                <interfaceOnly>true</interfaceOnly>-->
+<!--                                <dateLibrary>java8</dateLibrary>-->
+<!--                                <java8>true</java8>-->
+<!--                                <configPackage>com.vape.sso.swagger.v1.config</configPackage>-->
+<!--                                <singleContentTypes>true</singleContentTypes>-->
+<!--                                <useBeanValidation>true</useBeanValidation>-->
+<!--                                <delegatePattern>true</delegatePattern>-->
+<!--                            </configOptions>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
