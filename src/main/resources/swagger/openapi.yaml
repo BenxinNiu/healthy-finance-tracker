@@ -1,0 +1,239 @@
+openapi: "3.0.0"
+info:
+  description: finance tracker
+  title: Healthy Finance
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+paths:
+  /clients/{clientId}/profile:
+    get:
+      tags:
+        - get client profile
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientProfile"
+          description: ok
+    patch:
+      tags:
+        - patch client profile
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                ClientAccountList:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/ClientAccountUpdateRequst"
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientCreditAccount"
+          description: ok
+
+  /clients/{clientId}/transactions:
+    get:
+      summary: get transactions
+      tags:
+        - get transactions
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+          description: client id
+        - in: query
+          name: begin
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: end
+          schema:
+            type: string
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+          description: ok
+
+    post:
+      tags:
+        - post transaction
+      parameters:
+        - in: path
+          name: clientId
+          required: true
+          schema:
+            type: string
+          description: client id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                transactions:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Transaction'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClientProfile"
+          description: ok
+
+components:
+  schemas:
+    ClientProfile:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        nickName:
+          type: string
+        email:
+          type: string
+        assetHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/Balance"
+        debtHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/Balance"
+        creditInstitutionList:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClientCreditAccount"
+
+    ClientCreditAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        imageUrl:
+          type: string
+        type:
+          type: string
+          enum:
+            - VISA
+            - MASTERCARD
+            - AMEX
+            - CHEQUING
+            - SAVING
+            - TFSA
+            - INVESTMENT
+            - CASH
+        balanceHistory:
+          type: array
+          items:
+            $ref: "#/components/schemas/Balance"
+        expiryDate:
+          type: string
+
+    Balance:
+      type: object
+      properties:
+        amount:
+          type: string
+        lastUpdated:
+          type: string
+        type:
+          type: string
+          enum:
+            - DEBT
+            - ASSET
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        CreditAccountId:
+          type: string
+        PostedDate:
+          type: string
+        amount:
+          type: number
+        type:
+          type: string
+          enum:
+            - EXPENSE
+            - DEPOSIT
+        category:
+          type: string
+        purpose:
+          type: string
+        isEssential:
+          type: boolean
+        notes:
+          type: string
+
+    ClientAccountUpdateRequst:
+      allOf:
+        - $ref: "#/components/schemas/ClientCreditAccount"
+        - type: object
+          properties:
+            action:
+              type: string
+              enum:
+                - ADD
+                - REMOVE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
