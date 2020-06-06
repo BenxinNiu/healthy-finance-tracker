@@ -17,8 +17,8 @@ public class ClientProfileModel {
     private String firstName;
     private String lastName;
     private String email;
-    private List<Balance> totalAssetHistory;
-    private List<Balance> totalDebtHistory;
-    private List<ClientCreditAccount> clientCreditAccountList;
+    private List<BalanceModel> totalAssetHistory;
+    private List<BalanceModel> totalDebtHistory;
+    private List<ClientCreditAccountModel> clientCreditAccountModelList;
     private LocalDate lastUpdated;
 }

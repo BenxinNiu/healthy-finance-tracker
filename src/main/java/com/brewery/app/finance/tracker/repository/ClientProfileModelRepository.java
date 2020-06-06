@@ -5,4 +5,6 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Mono;
 
 public interface ClientProfileModelRepository extends ReactiveMongoRepository<ClientProfileModel, String> {
+
+    Mono<ClientProfileModel> getClientProfileModelById(String id);
 }

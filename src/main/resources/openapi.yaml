@@ -60,7 +60,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ClientCreditAccount"
+                $ref: "#/components/schemas/ClientProfile"
           description: ok
 
   /transactions/clients/{clientId}:
@@ -183,7 +183,7 @@ components:
       type: object
       properties:
         amount:
-          type: string
+          type: number
         lastUpdated:
           type: string
         type:
@@ -214,6 +214,8 @@ components:
           type: string
         isEssential:
           type: boolean
+        isUnexpected:
+          type: boolean
         notes:
           type: string
 
@@ -227,6 +229,7 @@ components:
               enum:
                 - ADD
                 - REMOVE
+                - UPDATE
 
     ClientAccountPatchRequest:
       type: object

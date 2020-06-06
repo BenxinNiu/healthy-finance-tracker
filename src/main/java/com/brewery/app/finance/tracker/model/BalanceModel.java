@@ -4,14 +4,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class Balance {
-    private String clientId;
+public class BalanceModel {
     private String accountId;
     private BigDecimal amount;
-    private LocalDate lastUpdated;
+    private LocalDateTime lastUpdated;
     private Enums.BalanceType balanceType;
 }

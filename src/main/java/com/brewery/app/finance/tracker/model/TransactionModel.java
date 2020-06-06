@@ -5,7 +5,8 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -14,8 +15,9 @@ public class TransactionModel {
     @Id
     private String id;
     private String creditAccountId;
-    private LocalDate postedTime;
-    private String type;
+    private LocalDateTime postedTime;
+    private BigDecimal amount;
+    private Enums.TransactionType type;
     private String category;
     private String purpose;
     private String notes;
