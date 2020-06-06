@@ -27,14 +27,14 @@ public class ClientProfileService {
 
     public Mono<ClientProfile> createNewClientProfile(Mono<ClientCreationPostRequest> clientCreationPostRequest) {
         return clientCreationPostRequest
-                .flatMap(clientProfileTransformer::toClientProfileModel)
+                .map(clientProfileTransformer::newProfileModel)
                 .flatMap(clientProfileModelRepository::save)
-                .flatMap(clientProfileTransformer::toDto);
+                .map(clientProfileTransformer::toDto);
     }
 
     public Mono<ClientProfile> getClientProfileById(String id) {
         return clientProfileModelRepository.getClientProfileModelById(id)
-                .flatMap(clientProfileTransformer::toDto);
+                .map(clientProfileTransformer::toDto);
     }
 
     public Mono<ClientProfile> patchClientProfile(String id, List<ClientAccountUpdate> accountUpdates) {
@@ -45,7 +45,7 @@ public class ClientProfileService {
                 });
         return updatedProfile
                 .flatMap(clientProfileModelRepository::save)
-                .flatMap(clientProfileTransformer::toDto);
+                .map(clientProfileTransformer::toDto);
     }
 
     private void updateClientCreditAccountList(ClientProfileModel profile, List<ClientAccountUpdate> update) {

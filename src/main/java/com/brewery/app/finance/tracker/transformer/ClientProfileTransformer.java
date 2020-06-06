@@ -17,16 +17,15 @@ public class ClientProfileTransformer {
     private final BalanceTransformer balanceTransformer;
     private final ClientCreditAccountTransformer clientCreditAccountTransformer;
 
-    public Mono<ClientProfileModel> toClientProfileModel(ClientCreationPostRequest request) {
-        return Mono.just(ClientProfileModel.builder()
+    public ClientProfileModel newProfileModel(ClientCreationPostRequest request) {
+        return ClientProfileModel.builder()
                 .email(request.getEmail())
                 .clientCreditAccountModelList(new ArrayList<>())
                 .lastUpdated(LocalDate.now())
-                .build()
-        );
+                .build();
     }
 
-    public Mono<ClientProfile> toDto(ClientProfileModel clientProfileModel) {
+    public ClientProfile toDto(ClientProfileModel clientProfileModel) {
         ClientProfile clientProfile = new ClientProfile();
         clientProfile.setId(clientProfileModel.getId());
         clientProfile.setFirstName(clientProfileModel.getFirstName());
@@ -37,6 +36,12 @@ public class ClientProfileTransformer {
         clientProfile.setDebtHistory(balanceTransformer.toDtoList(clientProfileModel.getTotalDebtHistory()));
         clientProfile.setCreditInstitutionList(clientCreditAccountTransformer.toDtoList(clientProfileModel.getClientCreditAccountModelList()));
 
-        return Mono.just(clientProfile);
+        if (clientProfileModel.getTotalAssetHistory().size() > 0){
+            clientProfile.setTotalAsset(clientProfileModel.getTotalAssetHistory().get(clientProfileModel.getTotalAssetHistory().size() -1 ).getAmount());
+        }
+        if (clientProfileModel.getTotalDebtHistory().size() > 0) {
+            clientProfile.setTotalDebt(clientProfileModel.getTotalDebtHistory().get(clientProfileModel.getTotalDebtHistory().size() -1 ).getAmount());
+        }
+        return clientProfile;
     }
 }

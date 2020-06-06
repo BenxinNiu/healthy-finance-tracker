@@ -139,6 +139,10 @@ components:
           type: string
         email:
           type: string
+        totalAsset:
+          type: number
+        totalDebt:
+          type: number
         assetHistory:
           type: array
           items:
