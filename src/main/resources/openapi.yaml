@@ -7,6 +7,23 @@ info:
 servers:
   - url: http://localhost:8080
 paths:
+  /clients/new:
+    post:
+      tags:
+        - create new client profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientCreationPostRequest'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProfile'
+          description: ok
+
   /clients/{clientId}/profile:
     get:
       tags:
@@ -37,11 +54,7 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                ClientAccountList:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/ClientAccountUpdateRequst"
+              $ref: "#/components/schemas/ClientAccountPatchRequest"
       responses:
         '200':
           content:
@@ -50,7 +63,7 @@ paths:
                 $ref: "#/components/schemas/ClientCreditAccount"
           description: ok
 
-  /clients/{clientId}/transactions:
+  /transactions/clients/{clientId}:
     get:
       summary: get transactions
       tags:
@@ -99,11 +112,8 @@ paths:
         content:
           application/json:
             schema:
-              properties:
-                transactions:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Transaction'
+              $ref: '#/components/schemas/TransactionsPostRequest'
+
       responses:
         '201':
           content:
@@ -117,7 +127,7 @@ components:
     ClientProfile:
       type: object
       required:
-        - id
+        - firstname
       properties:
         id:
           type: string
@@ -207,7 +217,7 @@ components:
         notes:
           type: string
 
-    ClientAccountUpdateRequst:
+    ClientAccountUpdate:
       allOf:
         - $ref: "#/components/schemas/ClientCreditAccount"
         - type: object
@@ -218,7 +228,34 @@ components:
                 - ADD
                 - REMOVE
 
+    ClientAccountPatchRequest:
+      type: object
+      properties:
+        ClientAccountList:
+          type: array
+          items:
+            $ref: "#/components/schemas/ClientAccountUpdate"
 
+
+    TransactionsPostRequest:
+      type: object
+      properties:
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+
+    ClientCreationPostRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        nickName:
+          type: string
+        email:
+          type: string
 
 
 
