@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,7 @@ public class ClientProfileService {
         Mono<ClientProfileModel> updatedProfile = clientProfileModelRepository.getClientProfileModelById(id)
                 .map(model -> {
                     this.updateClientCreditAccountList(model, accountUpdates);
+                    model.setLastUpdated(LocalDateTime.now());
                     return model;
                 });
         return updatedProfile

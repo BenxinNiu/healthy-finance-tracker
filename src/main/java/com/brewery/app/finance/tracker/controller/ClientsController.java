@@ -24,7 +24,8 @@ public class ClientsController implements ClientsApi {
     @Override
     public Mono<ResponseEntity<ClientProfile>> clientsClientIdProfileGet(String clientId, ServerWebExchange exchange) {
         return clientProfileService.getClientProfileById(clientId)
-                .map(clientProfile -> new ResponseEntity<>(clientProfile, HttpStatus.OK));
+                .map(clientProfile -> new ResponseEntity<>(clientProfile, HttpStatus.OK))
+                .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
     }
 
     @Override
@@ -32,14 +33,14 @@ public class ClientsController implements ClientsApi {
         log.info("\"Received request\\n\"");
         return clientProfileService.createNewClientProfile(clientCreationPostRequest)
                 .map(clientProfile -> new ResponseEntity<>(clientProfile, HttpStatus.CREATED));
-
     }
 
     @Override
     public Mono<ResponseEntity<ClientProfile>> clientsClientIdProfilePatch(String clientId, Mono<ClientAccountPatchRequest> clientAccountPatchRequest, ServerWebExchange exchange) {
         return clientAccountPatchRequest
                 .flatMap(patch -> clientProfileService.patchClientProfile(clientId, patch.getClientAccountList()))
-                .map(clientProfile -> new ResponseEntity<>(clientProfile, HttpStatus.CREATED));
+                .map(clientProfile -> new ResponseEntity<>(clientProfile, HttpStatus.CREATED))
+                .defaultIfEmpty(new ResponseEntity<>(null, HttpStatus.BAD_REQUEST));
     }
 
 }

@@ -3,11 +3,12 @@ package com.brewery.app.finance.tracker.transformer;
 import com.brewery.app.finance.tracker.codegen.model.ClientCreationPostRequest;
 import com.brewery.app.finance.tracker.codegen.model.ClientProfile;
 import com.brewery.app.finance.tracker.model.ClientProfileModel;
+import com.brewery.app.finance.tracker.service.BalanceCalculationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Component
@@ -16,12 +17,18 @@ public class ClientProfileTransformer {
 
     private final BalanceTransformer balanceTransformer;
     private final ClientCreditAccountTransformer clientCreditAccountTransformer;
+    private final BalanceCalculationService balanceCalculationService;
 
     public ClientProfileModel newProfileModel(ClientCreationPostRequest request) {
         return ClientProfileModel.builder()
                 .email(request.getEmail())
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .nickName(request.getNickName())
                 .clientCreditAccountModelList(new ArrayList<>())
-                .lastUpdated(LocalDate.now())
+                .totalAssetHistory(new ArrayList<>())
+                .totalDebtHistory(new ArrayList<>())
+                .lastUpdated(LocalDateTime.now())
                 .build();
     }
 
@@ -30,18 +37,14 @@ public class ClientProfileTransformer {
         clientProfile.setId(clientProfileModel.getId());
         clientProfile.setFirstName(clientProfileModel.getFirstName());
         clientProfile.setLastName(clientProfileModel.getLastName());
-        clientProfile.setNickName("");
+        clientProfile.setNickName(clientProfile.getNickName());
         clientProfile.setEmail(clientProfileModel.getEmail());
         clientProfile.setAssetHistory(balanceTransformer.toDtoList(clientProfileModel.getTotalAssetHistory()));
         clientProfile.setDebtHistory(balanceTransformer.toDtoList(clientProfileModel.getTotalDebtHistory()));
         clientProfile.setCreditInstitutionList(clientCreditAccountTransformer.toDtoList(clientProfileModel.getClientCreditAccountModelList()));
 
-        if (clientProfileModel.getTotalAssetHistory().size() > 0){
-            clientProfile.setTotalAsset(clientProfileModel.getTotalAssetHistory().get(clientProfileModel.getTotalAssetHistory().size() -1 ).getAmount());
-        }
-        if (clientProfileModel.getTotalDebtHistory().size() > 0) {
-            clientProfile.setTotalDebt(clientProfileModel.getTotalDebtHistory().get(clientProfileModel.getTotalDebtHistory().size() -1 ).getAmount());
-        }
+        balanceCalculationService.updateFinancialSummary(clientProfile, clientProfileModel);
+
         return clientProfile;
     }
 }

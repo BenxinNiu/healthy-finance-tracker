@@ -143,6 +143,8 @@ components:
           type: number
         totalDebt:
           type: number
+        totalDeficit:
+          type: number
         assetHistory:
           type: array
           items:

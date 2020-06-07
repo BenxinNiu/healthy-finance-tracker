@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -21,7 +22,7 @@ public class ClientCreditAccountTransformer {
 
     public void updateModel(ClientAccountUpdate update, ClientCreditAccountModel existing) {
         existing.setAccountName(update.getName());
-        existing.setExpiryDate(LocalDate.parse(update.getExpiryDate()));
+        existing.setExpiryDate(update.getExpiryDate());
         existing.setImageUrl(update.getImageUrl());
 
         if (update.getBalanceHistory() != null && update.getBalanceHistory().get(0) != null) {
@@ -33,14 +34,13 @@ public class ClientCreditAccountTransformer {
 
     public ClientCreditAccountModel toNewModel(ClientAccountUpdate update) {
         return ClientCreditAccountModel.builder()
-                // TODO change accountId
-                .accountId(update.getId())
+                .accountId(UUID.randomUUID().toString())
                 .accountName(update.getName())
                 .accountType(Enums.toEnum(Enums.ClientAccountType.class, update.getType().toString()))
-                .expiryDate(LocalDate.parse(update.getExpiryDate()))
+                .expiryDate(update.getExpiryDate())
                 .maxBalanceRecord(60)
                 .imageUrl(update.getImageUrl())
-                .balanceModelList(new ArrayList<>())
+                .balanceModelList(balanceTransformer.toModelList(update.getBalanceHistory()))
                 .build();
     }
 
@@ -57,7 +57,7 @@ public class ClientCreditAccountTransformer {
         clientCreditAccount.setImageUrl(clientCreditAccountModel.getImageUrl());
         clientCreditAccount.setType(Enums.toEnum(ClientCreditAccount.TypeEnum.class, clientCreditAccountModel.getAccountType().toString()));
         clientCreditAccount.setBalanceHistory(balanceTransformer.toDtoList(clientCreditAccountModel.getBalanceModelList()));
-        clientCreditAccount.setExpiryDate(clientCreditAccountModel.getExpiryDate().toString());
+        clientCreditAccount.setExpiryDate(clientCreditAccountModel.getExpiryDate());
 
         return clientCreditAccount;
     }

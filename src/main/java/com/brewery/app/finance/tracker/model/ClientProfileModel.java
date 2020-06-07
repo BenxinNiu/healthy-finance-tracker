@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
@@ -16,9 +17,10 @@ public class ClientProfileModel {
     private String id;
     private String firstName;
     private String lastName;
+    private String nickName;
     private String email;
     private List<BalanceModel> totalAssetHistory;
     private List<BalanceModel> totalDebtHistory;
     private List<ClientCreditAccountModel> clientCreditAccountModelList;
-    private LocalDate lastUpdated;
+    private LocalDateTime lastUpdated;
 }

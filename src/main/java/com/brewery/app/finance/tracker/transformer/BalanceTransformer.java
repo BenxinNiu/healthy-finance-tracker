@@ -13,6 +13,12 @@ import java.util.stream.Collectors;
 @Component
 public class BalanceTransformer {
 
+    public List<BalanceModel> toModelList(List<Balance> balanceList) {
+        return balanceList.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
+
     public BalanceModel toModel(Balance balance) {
         return BalanceModel.builder()
                 .amount(balance.getAmount())

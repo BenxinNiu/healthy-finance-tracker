@@ -15,6 +15,6 @@ public class ClientCreditAccountModel {
     private String imageUrl;
     private Enums.ClientAccountType accountType;
     private List<BalanceModel> balanceModelList;
-    private LocalDate expiryDate;
+    private String expiryDate;
     private int maxBalanceRecord;
 }
