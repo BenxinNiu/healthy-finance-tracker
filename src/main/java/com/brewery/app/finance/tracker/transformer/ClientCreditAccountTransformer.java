@@ -27,7 +27,6 @@ public class ClientCreditAccountTransformer {
 
         if (update.getBalanceHistory() != null && update.getBalanceHistory().get(0) != null) {
             BalanceModel balanceModel = balanceTransformer.toModel(update.getBalanceHistory().get(0));
-            balanceModel.setAccountId(existing.getAccountId());
             existing.getBalanceModelList().add(balanceModel);
         }
     }

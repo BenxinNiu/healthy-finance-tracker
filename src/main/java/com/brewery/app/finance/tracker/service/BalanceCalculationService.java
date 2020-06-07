@@ -8,6 +8,7 @@ import com.brewery.app.finance.tracker.model.Enums;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -21,6 +22,22 @@ public class BalanceCalculationService {
         if (totalDeficit.compareTo(BigDecimal.ZERO) < 0) {
             clientProfile.setTotalDeficit(totalDeficit.abs());
         }
+    }
+
+    ClientProfileModel updateClientProfileBalanceHistory(ClientProfileModel profile) {
+        BigDecimal newTotalAsset = calculateTotalAsset(profile.getClientCreditAccountModelList());
+        BigDecimal newTotalDebt = calculateTotalDebt(profile.getClientCreditAccountModelList());
+        // Add new total debt
+        profile.getTotalDebtHistory().add(BalanceModel.builder()
+                .balanceType(Enums.BalanceType.DEBT)
+                .lastUpdated(LocalDateTime.now())
+                .amount(newTotalDebt).build());
+        // Add new total asset
+        profile.getTotalAssetHistory().add(BalanceModel.builder()
+                .balanceType(Enums.BalanceType.ASSET)
+                .lastUpdated(LocalDateTime.now())
+                .amount(newTotalAsset).build());
+        return profile;
     }
 
     protected BigDecimal calculateTotalAsset(List<ClientCreditAccountModel> accountModelList) {

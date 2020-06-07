@@ -214,6 +214,7 @@ components:
           enum:
             - EXPENSE
             - DEPOSIT
+            - TRANSFER
         category:
           type: string
         purpose:

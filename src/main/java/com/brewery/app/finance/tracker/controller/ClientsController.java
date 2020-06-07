@@ -3,7 +3,6 @@ package com.brewery.app.finance.tracker.controller;
 import com.brewery.app.finance.tracker.codegen.api.ClientsApi;
 import com.brewery.app.finance.tracker.codegen.model.ClientAccountPatchRequest;
 import com.brewery.app.finance.tracker.codegen.model.ClientCreationPostRequest;
-import com.brewery.app.finance.tracker.codegen.model.ClientCreditAccount;
 import com.brewery.app.finance.tracker.codegen.model.ClientProfile;
 import com.brewery.app.finance.tracker.service.ClientProfileService;
 import lombok.AllArgsConstructor;

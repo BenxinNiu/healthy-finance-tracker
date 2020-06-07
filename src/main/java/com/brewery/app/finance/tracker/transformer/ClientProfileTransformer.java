@@ -37,7 +37,7 @@ public class ClientProfileTransformer {
         clientProfile.setId(clientProfileModel.getId());
         clientProfile.setFirstName(clientProfileModel.getFirstName());
         clientProfile.setLastName(clientProfileModel.getLastName());
-        clientProfile.setNickName(clientProfile.getNickName());
+        clientProfile.setNickName(clientProfileModel.getNickName());
         clientProfile.setEmail(clientProfileModel.getEmail());
         clientProfile.setAssetHistory(balanceTransformer.toDtoList(clientProfileModel.getTotalAssetHistory()));
         clientProfile.setDebtHistory(balanceTransformer.toDtoList(clientProfileModel.getTotalDebtHistory()));

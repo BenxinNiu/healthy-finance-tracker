@@ -25,6 +25,7 @@ public class ClientProfileService {
     private final ClientProfileModelRepository clientProfileModelRepository;
     private final ClientProfileTransformer clientProfileTransformer;
     private final ClientCreditAccountTransformer clientCreditAccountTransformer;
+    private final BalanceCalculationService balanceCalculationService;
 
     public Mono<ClientProfile> createNewClientProfile(Mono<ClientCreationPostRequest> clientCreationPostRequest) {
         return clientCreationPostRequest
@@ -38,15 +39,24 @@ public class ClientProfileService {
                 .map(clientProfileTransformer::toDto);
     }
 
+    public Mono<ClientProfileModel> getClientProfileModelById(String id) {
+        return clientProfileModelRepository.getClientProfileModelById(id);
+    }
+
     public Mono<ClientProfile> patchClientProfile(String id, List<ClientAccountUpdate> accountUpdates) {
         Mono<ClientProfileModel> updatedProfile = clientProfileModelRepository.getClientProfileModelById(id)
-                .map(model -> {
-                    this.updateClientCreditAccountList(model, accountUpdates);
-                    model.setLastUpdated(LocalDateTime.now());
-                    return model;
+                .map(profile -> {
+                    this.updateClientCreditAccountList(profile, accountUpdates);
+                    profile.setLastUpdated(LocalDateTime.now());
+                    return balanceCalculationService.updateClientProfileBalanceHistory(profile);
                 });
         return updatedProfile
                 .flatMap(clientProfileModelRepository::save)
+                .map(clientProfileTransformer::toDto);
+    }
+
+    public Mono<ClientProfile> saveClientProfile(ClientProfileModel clientProfileModel) {
+        return clientProfileModelRepository.save(clientProfileModel)
                 .map(clientProfileTransformer::toDto);
     }
 
